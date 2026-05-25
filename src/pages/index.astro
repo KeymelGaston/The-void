@@ -1,12 +1,42 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/Hero.astro';
+import { Image } from 'astro:assets';
+
+// Featured products
+import coat1 from '@/assets/images/products/oversized_wool_coat-1.jpg';
+import crewneck1 from '@/assets/images/products/ribbed_crewneck-1.jpg';
+import tote1 from '@/assets/images/products/structured_tote-1.jpg';
+import trench1 from '@/assets/images/products/trench_coat-1.jpg';
+
+// Editorial banners
+import bannerLookbook from '@/assets/images/lookbook/look-1.jpg';
+import bannerAbout from '@/assets/images/lookbook/look-6.jpg';
+
+// Categories
+import catTops from '@/assets/images/products/draped_silk_top-1.jpg';
+import catBottoms from '@/assets/images/products/slim_tapered_trouser-1.jpg';
+import catOuterwear from '@/assets/images/products/oversized_wool_coat-1.jpg';
+import catKnitwear from '@/assets/images/products/merino_turtleneck-1.jpg';
+import catBags from '@/assets/images/products/structured_tote-1.jpg';
+import catJewelry from '@/assets/images/products/chain_necklace-1.jpg';
+import catBelts from '@/assets/images/products/leather_belt-1.jpg';
 
 const featured = [
-  { id: 1,  name: 'Oversized Wool Coat', price: 420 },
-  { id: 4,  name: 'Ribbed Crewneck',     price: 145 },
-  { id: 3,  name: 'Structured Tote',     price: 260 },
-  { id: 11, name: 'Trench Coat',         price: 380 },
+  { id: 1,  name: 'Oversized Wool Coat', price: 420, image: coat1 },
+  { id: 4,  name: 'Ribbed Crewneck',     price: 145, image: crewneck1 },
+  { id: 3,  name: 'Structured Tote',     price: 260, image: tote1 },
+  { id: 11, name: 'Trench Coat',         price: 380, image: trench1 },
+];
+
+const categories = [
+  { name: 'Tops',      image: catTops },
+  { name: 'Bottoms',   image: catBottoms },
+  { name: 'Outerwear', image: catOuterwear },
+  { name: 'Knitwear',  image: catKnitwear },
+  { name: 'Bags',      image: catBags },
+  { name: 'Jewelry',   image: catJewelry },
+  { name: 'Belts',     image: catBelts },
 ];
 ---
 
@@ -19,12 +49,18 @@ const featured = [
       <h2 class="heading-display text-display-md text-void-white">New Arrivals</h2>
       <a href="/shop" class="label-caps text-void-muted hover:text-void-white transition-colors duration-300 underline underline-offset-4">View all</a>
     </div>
-    <!-- Product grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4" id="featured-grid">
       {featured.map((product) => (
         <a href={`/product/${product.id}`} class="group" data-gsap="fade-up">
-          <div class="aspect-[3/4] bg-void-surface mb-3 overflow-hidden">
-            <div class="w-full h-full bg-void-surface group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"></div>
+          <div class="aspect-[3/4] bg-void-surface mb-3 overflow-hidden relative">
+            <Image
+              src={product.image}
+              alt={product.name}
+              width={600}
+              height={800}
+              loading="lazy"
+              class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            />
           </div>
           <p class="text-void-white text-sm mb-1">{product.name}</p>
           <p class="text-void-muted text-sm font-light">${product.price}.00</p>
@@ -37,16 +73,16 @@ const featured = [
   <section class="container-void pb-24 md:pb-32">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
       <a href="/lookbook" class="group relative aspect-[4/3] bg-void-surface overflow-hidden flex items-end p-6 md:p-8" data-gsap="fade-up">
-        
+        <Image src={bannerLookbook} alt="Lookbook" width={800} height={600} loading="lazy" class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" />
         <div class="absolute inset-0 bg-gradient-to-t from-void-black/80 to-transparent"></div>
         <div class="relative z-10">
           <p class="label-caps text-void-midnight mb-2">FW26</p>
           <h3 class="heading-display text-2xl md:text-3xl text-void-white mb-1">View Lookbook</h3>
-          <p class="label-caps text-void-muted">11 editorial looks →</p>
+          <p class="label-caps text-void-muted">12 editorial looks →</p>
         </div>
       </a>
       <a href="/about" class="group relative aspect-[4/3] bg-void-surface overflow-hidden flex items-end p-6 md:p-8" data-gsap="fade-up">
-        
+        <Image src={bannerAbout} alt="About" width={800} height={600} loading="lazy" class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" />
         <div class="absolute inset-0 bg-gradient-to-t from-void-black/80 to-transparent"></div>
         <div class="relative z-10">
           <p class="label-caps text-void-midnight mb-2">The brand</p>
@@ -61,10 +97,11 @@ const featured = [
   <section class="container-void pb-24 md:pb-32">
     <p class="label-caps text-void-muted mb-8" data-gsap="fade-up">Shop by Category</p>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-      {['Tops', 'Bottoms', 'Outerwear', 'Knitwear', 'Bags', 'Jewelry', 'Belts'].map(cat => (
+      {categories.map(cat => (
         <a href="/shop" class="group relative aspect-square bg-void-surface flex items-end p-4 overflow-hidden" data-gsap="fade-up">
-          <div class="absolute inset-0 bg-void-midnight/0 group-hover:bg-void-midnight/20 transition-colors duration-500"></div>
-          <p class="label-caps text-void-white relative z-10">{cat}</p>
+          <Image src={cat.image} alt={cat.name} width={400} height={400} loading="lazy" class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]" />
+          <div class="absolute inset-0 bg-void-black/40 group-hover:bg-void-black/20 transition-colors duration-500"></div>
+          <p class="label-caps text-void-white relative z-10">{cat.name}</p>
         </a>
       ))}
     </div>

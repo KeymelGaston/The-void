@@ -1,19 +1,38 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import look1 from '@/assets/images/lookbook/look-1.jpg';
+import look2 from '@/assets/images/lookbook/look-2.jpg';
+import look3 from '@/assets/images/lookbook/look-3.jpg';
+import look4 from '@/assets/images/lookbook/look-4.jpg';
+import look5 from '@/assets/images/lookbook/look-5.jpg';
+import look6 from '@/assets/images/lookbook/look-6.jpg';
+import look7 from '@/assets/images/lookbook/look-7.jpg';
+import look8 from '@/assets/images/lookbook/look-8.jpg';
+import look9 from '@/assets/images/lookbook/look-9.jpg';
+import look10 from '@/assets/images/lookbook/look-10.jpg';
+import look11 from '@/assets/images/lookbook/look-11.jpg';
+import look12 from '@/assets/images/lookbook/look-12.jpg';
 
 const looks = [
-  { id: 1,  season: 'FW26', title: 'Into the Dark',       product: 'Oversized Wool Coat',  category: 'Outerwear', price: 420 },
-  { id: 2,  season: 'FW26', title: 'Absence of Noise',    product: 'Ribbed Crewneck',      category: 'Knitwear',  price: 145 },
-  { id: 3,  season: 'FW26', title: 'The Still Point',     product: 'Slim Tapered Trouser', category: 'Bottoms',   price: 180 },
-  { id: 4,  season: 'FW26', title: 'Void as Aesthetic',   product: 'Structured Tote',      category: 'Bags',      price: 260 },
-  { id: 5,  season: 'FW26', title: 'Deliberate Form',     product: 'Trench Coat',          category: 'Outerwear', price: 380 },
-  { id: 6,  season: 'FW26', title: 'Silence Wears Black', product: 'Merino Turtleneck',    category: 'Knitwear',  price: 165 },
-  { id: 7,  season: 'FW26', title: 'Stripped',            product: 'Draped Silk Top',      category: 'Tops',      price: 210 },
-  { id: 8,  season: 'FW26', title: 'Cold Light',          product: 'Wide Leg Pant',        category: 'Bottoms',   price: 195 },
-  { id: 9,  season: 'FW26', title: 'The Weight of Less',  product: 'Relaxed Linen Shirt',  category: 'Tops',      price: 135 },
-  { id: 10, season: 'FW26', title: 'Minimal Gesture',     product: 'Chain Necklace',       category: 'Jewelry',   price: 120 },
-  { id: 11, season: 'FW26', title: 'In Restraint',        product: 'Leather Belt',         category: 'Belts',     price: 110 },
+  { id: 1,  season: 'FW26', title: 'Into the Dark',       lema: 'Darkness is not the absence of light.',  image: look1  },
+  { id: 2,  season: 'FW26', title: 'Absence of Noise',    lema: 'Silence speaks louder than fashion.',     image: look2  },
+  { id: 3,  season: 'FW26', title: 'The Still Point',     lema: 'Where movement meets restraint.',         image: look3  },
+  { id: 4,  season: 'FW26', title: 'Void as Aesthetic',   lema: 'Nothing is the new everything.',          image: look4  },
+  { id: 5,  season: 'FW26', title: 'Deliberate Form',     lema: 'Every line is a decision.',               image: look5  },
+  { id: 6,  season: 'FW26', title: 'Silence Wears Black', lema: 'Black is not a color. It\'s a stance.',   image: look6  },
+  { id: 7,  season: 'FW26', title: 'Stripped',            lema: 'Remove until nothing is left to remove.', image: look7  },
+  { id: 8,  season: 'FW26', title: 'Cold Light',          lema: 'Beauty without warmth.',                  image: look8  },
+  { id: 9,  season: 'FW26', title: 'The Weight of Less',  lema: 'Less is not a compromise.',               image: look9  },
+  { id: 10, season: 'FW26', title: 'Minimal Gesture',     lema: 'The smallest details define everything.',  image: look10 },
+  { id: 11, season: 'FW26', title: 'In Restraint',        lema: 'Control is the highest form of freedom.', image: look11 },
+  { id: 12, season: 'FW26', title: 'Pure Geometry',       lema: 'Form follows silence.',                   image: look12 },
 ];
+
+const groups = [];
+for (let i = 0; i < looks.length; i += 3) {
+  groups.push(looks.slice(i, i + 3));
+}
 ---
 
 <BaseLayout title="Lookbook — The Void">
@@ -29,43 +48,81 @@ const looks = [
     </div>
   </section>
 
-  <!-- Grid -->
-  <section class="container-void py-12 md:py-16">
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-      {looks.map((look, i) => (
-        <a
-          href={`/product/${look.id}`}
-          class="look-card group relative overflow-hidden"
-          data-index={i}
+  <!-- Editorial Grid -->
+  <section class="container-void py-12 md:py-16 flex flex-col gap-3 md:gap-4">
+    {groups.map((group, gi) => (
+      <div class:list={['grid gap-3 md:gap-4', gi % 2 === 0 ? 'grid-cols-1 md:grid-cols-[2fr_1fr]' : 'grid-cols-1 md:grid-cols-[1fr_2fr]']}>
+
+        {/* Large image */}
+        <button
+          class="look-card group relative overflow-hidden text-left cursor-pointer"
+          data-look-id={group[0].id}
+          data-look-title={group[0].title}
+          data-look-lema={group[0].lema}
+          data-look-season={group[0].season}
+          data-look-num={String(gi * 3 + 1).padStart(2, '0')}
+          data-look-src={group[0].image.src}
         >
-          <!-- Image -->
           <div class="aspect-[3/4] bg-void-surface relative overflow-hidden">
-            <div class="w-full h-full bg-void-surface"></div>
-            <div class="absolute inset-0 bg-void-black/30 z-[1]"></div>
-
-            <!-- Slide number -->
-            <div class="absolute top-4 left-4 z-[2]">
-              <p class="label-caps text-void-white/30">{String(i + 1).padStart(2, '0')}</p>
+            {group[0].image && (
+              <Image
+                src={group[0].image}
+                alt={group[0].title}
+                width={800}
+                height={1067}
+                loading="lazy"
+                class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+              />
+            )}
+            <div class="absolute inset-0 bg-gradient-to-t from-void-black/80 via-transparent to-void-black/20 z-[1]"></div>
+            <div class="absolute top-5 left-5 z-[2]">
+              <p class="label-caps text-void-white/40">{String(gi * 3 + 1).padStart(2, '0')}</p>
             </div>
-
-            <!-- Title overlay -->
-            <div class="absolute bottom-0 left-0 right-0 p-4 md:p-5 bg-gradient-to-t from-void-black/90 to-transparent z-[2] translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-              <p class="label-caps text-void-midnight mb-1">{look.season}</p>
-              <h2 class="heading-display text-xl md:text-2xl text-void-white">{look.title}</h2>
+            <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-[2] translate-y-3 group-hover:translate-y-0 transition-transform duration-500">
+              <p class="label-caps text-void-midnight mb-2">{group[0].season}</p>
+              <h2 class="heading-display text-2xl md:text-4xl text-void-white">{group[0].title}</h2>
             </div>
           </div>
+        </button>
 
-          <!-- Product info -->
-          <div class="flex justify-between items-start mt-3 gap-2">
-            <div>
-              <p class="text-void-white text-sm mb-0.5">{look.product}</p>
-              <p class="label-caps text-void-muted">{look.category}</p>
-            </div>
-            <p class="text-void-white text-sm whitespace-nowrap">${look.price}</p>
-          </div>
-        </a>
-      ))}
-    </div>
+        {/* Two stacked small images */}
+        <div class="flex flex-col gap-3 md:gap-4">
+          {group.slice(1).map((look, si) => (
+            <button
+              class="look-card group relative overflow-hidden flex-1 text-left cursor-pointer"
+              data-look-id={look.id}
+              data-look-title={look.title}
+              data-look-lema={look.lema}
+              data-look-season={look.season}
+              data-look-num={String(gi * 3 + si + 2).padStart(2, '0')}
+              data-look-src={look.image.src}
+            >
+              <div class="h-full min-h-[280px] md:min-h-[200px] bg-void-surface relative overflow-hidden">
+                {look.image && (
+                  <Image
+                    src={look.image}
+                    alt={look.title}
+                    width={400}
+                    height={533}
+                    loading="lazy"
+                    class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  />
+                )}
+                <div class="absolute inset-0 bg-gradient-to-t from-void-black/80 via-transparent to-void-black/10 z-[1]"></div>
+                <div class="absolute top-4 left-4 z-[2]">
+                  <p class="label-caps text-void-white/40">{String(gi * 3 + si + 2).padStart(2, '0')}</p>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-4 md:p-5 z-[2] translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                  <p class="label-caps text-void-midnight mb-1">{look.season}</p>
+                  <h2 class="heading-display text-lg md:text-xl text-void-white">{look.title}</h2>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+
+      </div>
+    ))}
   </section>
 
   <!-- CTA -->
@@ -82,12 +139,49 @@ const looks = [
         </div>
       </div>
       <div class="grid grid-cols-2 gap-3">
-        {[1,2,3,4].map(() => (
-          <div class="aspect-square bg-void-surface"></div>
-        ))}
+        <Image src={look1} alt="Look 1" width={400} height={400} loading="lazy" class="w-full aspect-square object-cover" />
+        <Image src={look4} alt="Look 4" width={400} height={400} loading="lazy" class="w-full aspect-square object-cover" />
+        <Image src={look7} alt="Look 7" width={400} height={400} loading="lazy" class="w-full aspect-square object-cover" />
+        <Image src={look10} alt="Look 10" width={400} height={400} loading="lazy" class="w-full aspect-square object-cover" />
       </div>
     </div>
   </section>
+
+  <!-- Lightbox -->
+  <div
+    id="lightbox"
+    class="fixed inset-0 z-[100] bg-black/95 hidden items-center justify-center"
+    aria-modal="true"
+    role="dialog"
+  >
+    <button id="lightbox-close" class="absolute top-6 right-6 label-caps text-void-muted hover:text-void-white transition-colors duration-300 z-10">
+      Close —
+    </button>
+    <!-- Mobile: image + text strip -->
+    <div class="w-full h-full flex flex-col md:hidden">
+      <div class="relative overflow-hidden flex-1">
+        <img id="lightbox-img-mobile" src="" alt="" class="w-full h-full object-cover object-center" />
+      </div>
+      <div class="bg-void-black border-t border-void-border px-6 py-5 flex-shrink-0">
+        <p id="lightbox-season-mobile" class="label-caps text-void-midnight mb-2"></p>
+        <h2 id="lightbox-title-mobile" class="heading-display text-2xl text-void-white mb-2"></h2>
+        <p id="lightbox-lema-mobile" class="text-void-muted text-sm font-light leading-relaxed italic"></p>
+      </div>
+    </div>
+
+    <!-- Desktop: two columns -->
+    <div class="w-full h-full hidden md:grid md:grid-cols-2">
+      <div class="relative overflow-hidden">
+        <img id="lightbox-img" src="" alt="" class="w-full h-full object-cover object-top" />
+      </div>
+      <div class="flex flex-col justify-center px-16 py-0">
+        <p id="lightbox-season" class="label-caps text-void-midnight mb-3"></p>
+        <h2 id="lightbox-title" class="heading-display text-5xl text-void-white mb-6"></h2>
+        <p id="lightbox-lema" class="text-void-muted text-lg font-light leading-relaxed mb-8 italic"></p>
+        <p class="label-caps text-void-white/20 text-sm">— THE VOID</p>
+      </div>
+    </div>
+  </div>
 
 </BaseLayout>
 
@@ -96,26 +190,48 @@ const looks = [
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
   gsap.registerPlugin(ScrollTrigger);
 
-  // ── Header entrance ──────────────────────────────────
+  // ── Preload lightbox images after page load ─────────
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelectorAll('.look-card').forEach(card => {
+        const src = (card as HTMLElement).dataset.lookSrc;
+        if (src) {
+          const img = new Image();
+          img.src = src;
+        }
+      });
+    }, 2000);
+  });
+
+  // ── Header entrance ───────────────────────────────────
   const header = document.getElementById('look-header');
   requestAnimationFrame(() => requestAnimationFrame(() => {
     gsap.set(header, { opacity: 0, y: 24 });
     gsap.to(header, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' });
   }));
 
-  // ── Cards stagger on scroll ──────────────────────────
-  document.querySelectorAll('.look-card').forEach((el, i) => {
-    gsap.set(el, { opacity: 0, y: 24 });
-    gsap.to(el, {
-      opacity: 1, y: 0,
-      duration: 1.0,
-      ease: 'power2.out',
-      stagger: 0.08,
-      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-    });
-  });
+  // ── IntersectionObserver para cards ──────────────────
+  // Inicializa todas ocultas
+  const cards = document.querySelectorAll('.look-card');
+  cards.forEach(el => gsap.set(el, { opacity: 0, y: 32 }));
 
-  // ── CTA ──────────────────────────────────────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        gsap.to(entry.target, {
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: 'power3.out',
+        });
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cards.forEach(el => observer.observe(el));
+
+  // ── CTA ───────────────────────────────────────────────
   const cta = document.getElementById('look-cta');
   if (cta) {
     gsap.set(cta, { opacity: 0, y: 24 });
@@ -126,4 +242,72 @@ const looks = [
       scrollTrigger: { trigger: cta, start: 'top 85%', once: true },
     });
   }
+
+  // ── Lightbox ──────────────────────────────────────────
+  const lightbox      = document.getElementById('lightbox');
+  const lightboxImg   = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lightboxTitle = document.getElementById('lightbox-title');
+  const lightboxLema  = document.getElementById('lightbox-lema');
+  const lightboxSeason = document.getElementById('lightbox-season');
+  const closeBtn      = document.getElementById('lightbox-close');
+
+  function openLightbox(card: HTMLElement) {
+    if (!lightbox) return;
+    const src    = card.dataset.lookSrc    ?? '';
+    const title  = card.dataset.lookTitle  ?? '';
+    const lema   = card.dataset.lookLema   ?? '';
+    const season = card.dataset.lookSeason ?? '';
+
+    const imgM  = document.getElementById('lightbox-img-mobile') as HTMLImageElement;
+    const ttlM  = document.getElementById('lightbox-title-mobile');
+    const lmM   = document.getElementById('lightbox-lema-mobile');
+    const ssnM  = document.getElementById('lightbox-season-mobile');
+
+    // Fill text immediately
+    lightboxTitle!.textContent  = title;
+    lightboxLema!.textContent   = lema;
+    lightboxSeason!.textContent = season;
+    if (ttlM) ttlM.textContent = title;
+    if (lmM)  lmM.textContent  = lema;
+    if (ssnM) ssnM.textContent = season;
+
+    // Show lightbox immediately, load image inside
+    lightbox.classList.remove('hidden');
+    lightbox.classList.add('flex');
+    gsap.fromTo(lightbox, { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+
+    // Set image src after lightbox is visible
+    requestAnimationFrame(() => {
+      lightboxImg!.src = src;
+      lightboxImg!.alt = title;
+      if (imgM) { imgM.src = src; imgM.alt = title; }
+    });
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    if (!lightbox) return;
+    gsap.to(lightbox, {
+      opacity: 0, duration: 0.4, ease: 'power2.in',
+      onComplete: () => {
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => openLightbox(card as HTMLElement));
+  });
+
+  closeBtn?.addEventListener('click', closeLightbox);
+
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
 </script>

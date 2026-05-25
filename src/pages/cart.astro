@@ -7,7 +7,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
   <section class="pt-28 md:pt-32 container-void pb-24 min-h-screen">
 
     <div id="cart-header" class="flex items-end justify-between mb-10 md:mb-14 border-b border-void-border pb-6">
-      <h1 class="heading-display text-display-md text-void-white">Cart</h1>
+      <h1 class="heading-display text-3xl md:text-display-md text-void-white">Cart</h1>
       <p id="cart-count-label" class="label-caps text-void-muted">0 items</p>
     </div>
 
@@ -144,7 +144,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
     if (countEl) countEl.textContent = `${totalQty} items`;
 
     itemsEl.innerHTML = cart.map(item => `
-      <div class="cart-item grid grid-cols-[80px_1fr] sm:grid-cols-[100px_1fr] gap-4 sm:gap-6 py-6"
+      <div class="cart-item grid grid-cols-[72px_1fr] sm:grid-cols-[100px_1fr] gap-3 sm:gap-6 py-6"
         data-id="${item.id}" data-color="${item.color}" data-size="${item.size}">
         <a href="/product/${item.id}">
           <div class="aspect-[3/4] bg-void-surface w-full overflow-hidden hover:opacity-80 transition-opacity duration-300">
@@ -154,26 +154,26 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
             }
           </div>
         </a>
-        <div class="flex flex-col justify-between">
-          <div class="flex justify-between items-start gap-4">
-            <div>
-              <a href="/product/${item.id}" class="text-void-white text-sm hover:text-void-muted transition-colors duration-300">${item.name}</a>
-              <p class="label-caps text-void-muted mt-1">${item.category}</p>
+        <div class="flex flex-col justify-between min-w-0">
+          <div class="flex justify-between items-start gap-2">
+            <div class="min-w-0">
+              <a href="/product/${item.id}" class="text-void-white text-xs sm:text-sm hover:text-void-muted transition-colors duration-300 block truncate">${item.name}</a>
+              <p class="label-caps text-void-muted mt-1 text-[9px] sm:text-xs">${item.category}</p>
             </div>
-            <p class="item-total text-void-white text-sm whitespace-nowrap">$${item.price * item.qty}</p>
+            <p class="item-total text-void-white text-xs sm:text-sm whitespace-nowrap ml-2">$${item.price * item.qty}</p>
           </div>
-          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-4">
-            <div class="flex gap-4">
-              <div><p class="label-caps text-void-muted mb-1">Color</p><p class="label-caps text-void-white">${item.color}</p></div>
-              <div><p class="label-caps text-void-muted mb-1">Size</p><p class="label-caps text-void-white">${item.size}</p></div>
+          <div class="flex flex-col gap-3 mt-3">
+            <div class="flex gap-3">
+              <div><p class="label-caps text-void-muted mb-0.5 text-[9px]">Color</p><p class="label-caps text-void-white text-[9px] sm:text-xs">${item.color}</p></div>
+              <div><p class="label-caps text-void-muted mb-0.5 text-[9px]">Size</p><p class="label-caps text-void-white text-[9px] sm:text-xs">${item.size}</p></div>
             </div>
-            <div class="flex items-center gap-4">
+            <div class="flex items-center justify-between">
               <div class="flex items-center border border-void-border">
-                <button class="qty-btn px-3 py-1.5 label-caps text-void-muted hover:text-void-white transition-colors duration-200" data-action="decrease">−</button>
-                <span class="qty-display label-caps text-void-white px-3 py-1.5 border-x border-void-border min-w-[36px] text-center">${item.qty}</span>
-                <button class="qty-btn px-3 py-1.5 label-caps text-void-muted hover:text-void-white transition-colors duration-200" data-action="increase">+</button>
+                <button class="qty-btn px-2 py-1 label-caps text-void-muted hover:text-void-white transition-colors duration-200 text-xs" data-action="decrease">−</button>
+                <span class="qty-display label-caps text-void-white px-2 py-1 border-x border-void-border min-w-[28px] text-center text-xs">${item.qty}</span>
+                <button class="qty-btn px-2 py-1 label-caps text-void-muted hover:text-void-white transition-colors duration-200 text-xs" data-action="increase">+</button>
               </div>
-              <button class="remove-btn label-caps text-void-muted hover:text-void-white underline underline-offset-4 transition-colors duration-300">Remove</button>
+              <button class="remove-btn label-caps text-void-muted hover:text-void-white underline underline-offset-4 transition-colors duration-300 text-[9px] sm:text-xs">Remove</button>
             </div>
           </div>
         </div>

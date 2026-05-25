@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import aboutImg from '@/assets/images/lookbook/look-12.jpg';
 
 const values = [
   { number: '01', title: 'Restraint',  body: 'We believe in the power of less. Every piece is stripped to its essence — no excess, no noise. Only what is necessary.' },
@@ -15,7 +17,7 @@ const values = [
     <!-- Opening statement -->
     <div id="about-intro" class="max-w-2xl mb-20 md:mb-32">
       <p class="label-caps text-void-midnight mb-6">The Void — Est. 2024</p>
-      <h1 class="heading-display text-display-lg text-void-white leading-tight mb-8">
+      <h1 class="heading-display text-4xl md:text-display-lg text-void-white leading-tight mb-8">
         We make clothes<br />for those who<br />need nothing.
       </h1>
       <p class="text-void-muted text-sm font-light leading-relaxed max-w-sm">
@@ -30,7 +32,7 @@ const values = [
     <div id="about-manifesto" class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 mb-20 md:mb-32">
       <div>
         <p class="label-caps text-void-muted mb-6">Manifesto</p>
-        <p class="heading-display text-display-md text-void-white mb-0">
+        <p class="heading-display text-3xl md:text-display-md text-void-white mb-0">
           "Silence<br />as a<br />statement."
         </p>
       </div>
@@ -57,7 +59,7 @@ const values = [
         {values.map(v => (
           <div class="value-item grid grid-cols-1 md:grid-cols-[120px_1fr_1fr] gap-4 md:gap-12 py-10">
             <p class="label-caps text-void-border">{v.number}</p>
-            <h3 class="heading-display text-display-md text-void-white">{v.title}</h3>
+            <h3 class="heading-display text-2xl md:text-display-md text-void-white">{v.title}</h3>
             <p class="text-void-muted text-sm font-light leading-relaxed self-end">{v.body}</p>
           </div>
         ))}
@@ -71,7 +73,7 @@ const values = [
     <div id="about-closing" class="grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
       <div>
         <p class="label-caps text-void-muted mb-6">The collection</p>
-        <p class="heading-display text-display-md text-void-white mb-8">
+        <p class="heading-display text-3xl md:text-display-md text-void-white mb-8">
           Explore<br />the void.
         </p>
         <div class="flex flex-col xs:flex-row gap-3">
@@ -79,7 +81,9 @@ const values = [
           <a href="/lookbook" class="btn-void-ghost text-center">View Lookbook</a>
         </div>
       </div>
-      <div class="aspect-[4/3] bg-void-surface"></div>
+      <div class="aspect-[4/3] bg-void-surface overflow-hidden relative">
+        <Image src={aboutImg} alt="The Void" width={800} height={600} loading="lazy" class="w-full h-full object-cover object-top" />
+      </div>
     </div>
 
   </section>
