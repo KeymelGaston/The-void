@@ -1,10 +1,15 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import coat1 from '@/assets/images/products/oversized_wool_coat-1.jpg';
+import coat2 from '@/assets/images/products/oversized_wool_coat-2.jpg';
+import coat3 from '@/assets/images/products/oversized_wool_coat-3.jpg';
+import coat4 from '@/assets/images/products/oversized_wool_coat-4.jpg';
 
 const categories = ['All', 'Tops', 'Bottoms', 'Outerwear', 'Knitwear', 'Bags', 'Jewelry', 'Belts'];
 
 const products = [
-  { id: 1,  name: 'Oversized Wool Coat',  price: 420, category: 'Outerwear', defaultColor: 'Black', defaultSize: 'M',        images: ['/images/products/oversized_wool_coat-1.jpg', '/images/products/oversized_wool_coat-2.jpg', '/images/products/oversized_wool_coat-3.jpg', '/images/products/oversized_wool_coat-4.jpg'] },
+  { id: 1,  name: 'Oversized Wool Coat',  price: 420, category: 'Outerwear', defaultColor: 'Black', defaultSize: 'M',        images: [coat1, coat2, coat3, coat4] },
   { id: 2,  name: 'Slim Tapered Trouser', price: 180, category: 'Bottoms',   defaultColor: 'Black', defaultSize: 'M',        images: [] },
   { id: 3,  name: 'Structured Tote',      price: 260, category: 'Bags',      defaultColor: 'Black', defaultSize: 'One Size', images: [] },
   { id: 4,  name: 'Ribbed Crewneck',      price: 145, category: 'Knitwear',  defaultColor: 'Black', defaultSize: 'M',        images: [] },
@@ -81,15 +86,21 @@ const products = [
           <div class="aspect-[3/4] bg-void-surface mb-3 overflow-hidden relative">
             {product.images[0] ? (
               <>
-                <img
+                <Image
                   src={product.images[0]}
                   alt={product.name}
+                  width={600}
+                  height={800}
+                  loading="lazy"
                   class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-0"
                 />
                 {product.images[1] && (
-                  <img
+                  <Image
                     src={product.images[1]}
                     alt={product.name}
+                    width={600}
+                    height={800}
+                    loading="lazy"
                     class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100"
                   />
                 )}

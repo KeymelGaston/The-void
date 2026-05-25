@@ -1,9 +1,14 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import coat1 from '@/assets/images/products/oversized_wool_coat-1.jpg';
+import coat2 from '@/assets/images/products/oversized_wool_coat-2.jpg';
+import coat3 from '@/assets/images/products/oversized_wool_coat-3.jpg';
+import coat4 from '@/assets/images/products/oversized_wool_coat-4.jpg';
 
 export function getStaticPaths() {
   const products = [
-    { id: 1,  name: 'Oversized Wool Coat',    price: 420, category: 'Outerwear', colors: ['Black', 'Camel', 'Midnight'], sizes: ['XS','S','M','L','XL'], description: 'A structured oversized silhouette in premium double-faced wool. Clean lapels, minimal hardware. The coat as statement.',        images: ['/images/products/oversized_wool_coat-1.jpg', '/images/products/oversized_wool_coat-2.jpg', '/images/products/oversized_wool_coat-3.jpg', '/images/products/oversized_wool_coat-4.jpg'] },
+    { id: 1,  name: 'Oversized Wool Coat',    price: 420, category: 'Outerwear', colors: ['Black', 'Camel', 'Midnight'], sizes: ['XS','S','M','L','XL'], description: 'A structured oversized silhouette in premium double-faced wool. Clean lapels, minimal hardware. The coat as statement.',        images: [coat1, coat2, coat3, coat4] },
     { id: 2,  name: 'Slim Tapered Trouser',   price: 180, category: 'Bottoms',   colors: ['Black', 'Ivory', 'Charcoal'], sizes: ['XS','S','M','L','XL'], description: 'Tailored in a fine Italian wool blend. High-rise, slim through the thigh, tapered at the ankle. Precision cut.',               images: [] },
     { id: 3,  name: 'Structured Tote',        price: 260, category: 'Bags',      colors: ['Black', 'Midnight'],           sizes: ['One Size'],             description: 'Full-grain vegetable-tanned leather. Minimal stitching, brass hardware. Expands to carry everything, reveals nothing.',       images: [] },
     { id: 4,  name: 'Ribbed Crewneck',        price: 145, category: 'Knitwear',  colors: ['Black', 'Ivory', 'Slate'],    sizes: ['XS','S','M','L','XL'], description: 'Extra-fine merino wool in a dense rib. Relaxed fit, reinforced seams. The foundation of every outfit.',                      images: [] },
@@ -58,9 +63,12 @@ const { product } = Astro.props;
         <div class="aspect-[3/4] bg-void-surface w-full overflow-hidden relative">
           {product.images.length > 0 ? (
             product.images.map((src, i) => (
-              <img
+              <Image
                 src={src}
                 alt={product.name}
+                width={800}
+                height={1067}
+                loading="lazy"
                 class:list={['product-main-img absolute inset-0 w-full h-full object-cover transition-opacity duration-500', i === 0 ? 'opacity-100' : 'opacity-0']}
                 data-index={i}
               />
@@ -76,7 +84,7 @@ const { product } = Astro.props;
                 class:list={['thumbnail aspect-square bg-void-surface overflow-hidden cursor-pointer border transition-colors duration-200', i === 0 ? 'border-void-white' : 'border-transparent hover:border-void-border']}
                 data-index={i}
               >
-                <img src={src} alt={`${product.name} ${i + 1}`} class="w-full h-full object-cover" />
+                <Image src={src} alt={`${product.name} ${i + 1}`} width={200} height={200} loading="lazy" class="w-full h-full object-cover" />
               </button>
             ))
           ) : (
