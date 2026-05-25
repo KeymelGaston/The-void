@@ -42,18 +42,18 @@ import necklace2 from '@/assets/images/products/chain_necklace-2.jpg';
 const categories = ['All', 'Tops', 'Bottoms', 'Outerwear', 'Knitwear', 'Bags', 'Jewelry', 'Belts'];
 
 const products = [
-  { id: 1,  name: 'Oversized Wool Coat',  price: 420, category: 'Outerwear', defaultColor: 'Black', defaultSize: 'M',        images: [coat1, coat2] },
-  { id: 2,  name: 'Slim Tapered Trouser', price: 180, category: 'Bottoms',   defaultColor: 'Black', defaultSize: 'M',        images: [trouser1, trouser2] },
-  { id: 3,  name: 'Structured Tote',      price: 260, category: 'Bags',      defaultColor: 'Black', defaultSize: 'One Size', images: [tote1, tote2] },
-  { id: 4,  name: 'Ribbed Crewneck',      price: 145, category: 'Knitwear',  defaultColor: 'Black', defaultSize: 'M',        images: [crewneck1, crewneck2] },
-  { id: 5,  name: 'Draped Silk Top',      price: 210, category: 'Tops',      defaultColor: 'Black', defaultSize: 'M',        images: [silktop1, silktop2] },
-  { id: 6,  name: 'Minimal Gold Ring',    price: 95,  category: 'Jewelry',   defaultColor: 'Gold',  defaultSize: '7',        images: [ring1, ring2] },
-  { id: 7,  name: 'Wide Leg Pant',        price: 195, category: 'Bottoms',   defaultColor: 'Black', defaultSize: 'M',        images: [widepant1, widepant2] },
-  { id: 8,  name: 'Leather Belt',         price: 110, category: 'Belts',     defaultColor: 'Black', defaultSize: 'M',        images: [belt1, belt2] },
-  { id: 9,  name: 'Merino Turtleneck',    price: 165, category: 'Knitwear',  defaultColor: 'Black', defaultSize: 'M',        images: [turtleneck1, turtleneck2] },
-  { id: 10, name: 'Relaxed Linen Shirt',  price: 135, category: 'Tops',      defaultColor: 'Black', defaultSize: 'M',        images: [linenshirt1, linenshirt2] },
-  { id: 11, name: 'Trench Coat',          price: 380, category: 'Outerwear', defaultColor: 'Black', defaultSize: 'M',        images: [trench1, trench2] },
-  { id: 12, name: 'Chain Necklace',       price: 120, category: 'Jewelry',   defaultColor: 'Gold',  defaultSize: '18\"',      images: [necklace1, necklace2] },
+  { id: 1,  name: 'Oversized Wool Coat',  price: 420, category: 'Outerwear', defaultColor: 'Black', defaultSize: 'M',        images: [coat1, coat2],       imagePath: '/images/products/oversized_wool_coat-1.jpg' },
+  { id: 2,  name: 'Slim Tapered Trouser', price: 180, category: 'Bottoms',   defaultColor: 'Black', defaultSize: 'M',        images: [trouser1, trouser2], imagePath: '/images/products/slim_tapered_trouser-1.jpg' },
+  { id: 3,  name: 'Structured Tote',      price: 260, category: 'Bags',      defaultColor: 'Black', defaultSize: 'One Size', images: [tote1, tote2],       imagePath: '/images/products/structured_tote-1.jpg' },
+  { id: 4,  name: 'Ribbed Crewneck',      price: 145, category: 'Knitwear',  defaultColor: 'Black', defaultSize: 'M',        images: [crewneck1, crewneck2], imagePath: '/images/products/ribbed_crewneck-1.jpg' },
+  { id: 5,  name: 'Draped Silk Top',      price: 210, category: 'Tops',      defaultColor: 'Black', defaultSize: 'M',        images: [silktop1, silktop2], imagePath: '/images/products/draped_silk_top-1.jpg' },
+  { id: 6,  name: 'Minimal Gold Ring',    price: 95,  category: 'Jewelry',   defaultColor: 'Gold',  defaultSize: '7',        images: [ring1, ring2],       imagePath: '/images/products/minimal_gold_ring-1.jpg' },
+  { id: 7,  name: 'Wide Leg Pant',        price: 195, category: 'Bottoms',   defaultColor: 'Black', defaultSize: 'M',        images: [widepant1, widepant2], imagePath: '/images/products/wide_leg_pant-1.jpg' },
+  { id: 8,  name: 'Leather Belt',         price: 110, category: 'Belts',     defaultColor: 'Black', defaultSize: 'M',        images: [belt1, belt2],       imagePath: '/images/products/leather_belt-1.jpg' },
+  { id: 9,  name: 'Merino Turtleneck',    price: 165, category: 'Knitwear',  defaultColor: 'Black', defaultSize: 'M',        images: [turtleneck1, turtleneck2], imagePath: '/images/products/merino_turtleneck-1.jpg' },
+  { id: 10, name: 'Relaxed Linen Shirt',  price: 135, category: 'Tops',      defaultColor: 'Black', defaultSize: 'M',        images: [linenshirt1, linenshirt2], imagePath: '/images/products/relaxed_linen_shirt-1.jpg' },
+  { id: 11, name: 'Trench Coat',          price: 380, category: 'Outerwear', defaultColor: 'Black', defaultSize: 'M',        images: [trench1, trench2],   imagePath: '/images/products/trench_coat-1.jpg' },
+  { id: 12, name: 'Chain Necklace',       price: 120, category: 'Jewelry',   defaultColor: 'Gold',  defaultSize: '18\"',      images: [necklace1, necklace2], imagePath: '/images/products/chain_necklace-1.jpg' },
 ];
 ---
 
@@ -151,6 +151,7 @@ const products = [
                 data-price={product.price}
                 data-color={product.defaultColor}
                 data-size={product.defaultSize}
+                data-image={product.imagePath}
                 onclick="event.preventDefault()"
               >
                 Quick Add
@@ -311,6 +312,7 @@ const products = [
         price:    Number(el.dataset.price),
         color:    el.dataset.color    ?? 'Black',
         size:     el.dataset.size     ?? 'M',
+        image:    el.dataset.image    ?? '',
       });
       const original = btn.textContent;
       btn.textContent = 'Added —';
