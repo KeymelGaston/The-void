@@ -1,0 +1,106 @@
+---
+// Hero.astro — Full-screen editorial hero
+---
+
+<section id="hero" class="relative w-full min-h-screen flex items-end overflow-hidden bg-void-black">
+
+  <!-- Background media placeholder (swap for real video/image) -->
+  <div class="absolute inset-0 z-0">
+    <!-- Gradient overlay for text legibility -->
+    <div class="absolute inset-0 bg-gradient-to-t from-void-black via-void-black/50 to-transparent z-10"></div>
+    <!-- Placeholder bg — replace with <video> or <Image> -->
+    <div class="w-full h-full bg-void-surface opacity-60"></div>
+  </div>
+
+  <!-- Content -->
+  <div class="container-void relative z-20 pb-16 md:pb-24">
+    <div class="max-w-2xl">
+
+      <!-- Season label -->
+      <p
+        id="hero-label"
+        class="label-caps text-void-midnight mb-4 md:mb-6"
+      >
+        Fall / Winter 2026
+      </p>
+
+      <!-- Headline -->
+      <h1
+        id="hero-title"
+        class="heading-display text-display-xl text-void-white mb-4 md:mb-6"
+      >
+        Into<br />the dark
+      </h1>
+
+      <!-- Subtitle -->
+      <p
+        id="hero-subtitle"
+        class="text-void-muted text-sm md:text-base font-light leading-relaxed mb-8 md:mb-10 max-w-sm"
+      >
+        Silence as a statement.<br />Void as an aesthetic.
+      </p>
+
+      <!-- CTAs -->
+      <div
+        id="hero-cta"
+        class="flex flex-col xs:flex-row gap-3 xs:gap-4"
+      >
+        <a href="/shop" class="btn-void text-center">
+          Shop Collection
+        </a>
+        <a href="/lookbook" class="btn-void-ghost text-center">
+          View Lookbook
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div
+    id="hero-scroll"
+    class="absolute bottom-8 right-6 md:right-12 z-20 flex flex-col items-center gap-2"
+    data-gsap="fade"
+  >
+    <span class="label-caps text-void-muted/60 [writing-mode:vertical-lr]">Scroll</span>
+    <div class="w-px h-12 bg-void-muted/40 overflow-hidden">
+      <div id="scroll-line" class="w-full h-full bg-void-white origin-top"></div>
+    </div>
+  </div>
+
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { initHero } from '@/lib/animations';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const label    = document.getElementById('hero-label');
+  const title    = document.getElementById('hero-title');
+  const subtitle = document.getElementById('hero-subtitle');
+  const cta      = document.getElementById('hero-cta');
+  const scroll   = document.getElementById('hero-scroll');
+  const line     = document.getElementById('scroll-line');
+
+  // Set initial states via GSAP (not CSS)
+  gsap.set([label, title, subtitle, cta, scroll], { opacity: 0, y: 24 });
+
+  // Double rAF guarantees DOM is painted before animating
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      initHero({ label, title, subtitle, cta });
+      gsap.to(scroll, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 1.8 });
+      gsap.to(line, {
+        scaleY: 0,
+        duration: 1.2,
+        ease: 'power2.inOut',
+        repeat: -1,
+        yoyo: true,
+        transformOrigin: 'top',
+        delay: 2,
+      });
+    });
+  });
+</script>

@@ -1,0 +1,210 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Cart — The Void">
+
+  <section class="pt-28 md:pt-32 container-void pb-24 min-h-screen">
+
+    <div id="cart-header" class="flex items-end justify-between mb-10 md:mb-14 border-b border-void-border pb-6">
+      <h1 class="heading-display text-display-md text-void-white">Cart</h1>
+      <p id="cart-count-label" class="label-caps text-void-muted">0 items</p>
+    </div>
+
+    <div id="cart-content" class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 lg:gap-16 items-start hidden">
+
+      <div id="cart-items" class="flex flex-col divide-y divide-void-border"></div>
+
+      <div id="cart-summary" class="bg-void-surface p-6 md:p-8 lg:sticky lg:top-24">
+        <p class="label-caps text-void-white mb-6">Order Summary</p>
+        <div class="flex flex-col gap-3 mb-6">
+          <div class="flex justify-between">
+            <p class="label-caps text-void-muted">Subtotal</p>
+            <p id="summary-subtotal" class="label-caps text-void-white">$0</p>
+          </div>
+          <div class="flex justify-between">
+            <p class="label-caps text-void-muted">Shipping</p>
+            <p id="summary-shipping" class="label-caps text-void-white">—</p>
+          </div>
+          <p id="shipping-note" class="text-void-muted text-xs font-light hidden">Free shipping on orders over $200</p>
+        </div>
+        <div class="border-t border-void-border pt-4 mb-8">
+          <div class="flex justify-between">
+            <p class="label-caps text-void-white">Total</p>
+            <p id="summary-total" class="label-caps text-void-white">$0</p>
+          </div>
+        </div>
+        <div class="flex gap-2 mb-6">
+          <input type="text" id="promo-input" name="promo" placeholder="Promo code"
+            class="flex-1 bg-transparent border border-void-border text-void-white text-xs font-light px-3 py-2.5 placeholder:text-void-muted/50 focus:outline-none focus:border-void-muted transition-colors duration-300"/>
+          <button id="promo-btn" class="label-caps text-void-white border border-void-border px-4 hover:border-void-white transition-colors duration-300">Apply</button>
+        </div>
+        <button id="checkout-btn" class="w-full label-caps text-void-black bg-void-white py-4 hover:bg-void-white/90 transition-all duration-300 mb-3">
+          Proceed to Checkout
+        </button>
+        <a href="/shop" class="block w-full text-center label-caps text-void-muted hover:text-void-white border border-void-border py-4 hover:border-void-white transition-all duration-300">
+          Continue Shopping
+        </a>
+        <div class="flex flex-col gap-2 mt-6 pt-6 border-t border-void-border">
+          {['Free returns within 14 days', 'Secure checkout', 'Carbon neutral shipping'].map(msg => (
+            <div class="flex items-center gap-2">
+              <span class="text-void-midnight">—</span>
+              <p class="label-caps text-void-muted">{msg}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+
+    <div id="empty-cart" class="py-32 text-center">
+      <p class="heading-display text-display-lg text-void-white/10 mb-4">—</p>
+      <p class="label-caps text-void-muted mb-8">Your cart is empty</p>
+      <a href="/shop" class="btn-void">Shop Collection</a>
+    </div>
+
+  </section>
+
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { getCart, getCartTotals, updateQty, removeFromCart } from '@/lib/cart';
+
+  const header = document.getElementById('cart-header');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    gsap.set(header, { opacity: 0, y: 24 });
+    gsap.to(header, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' });
+  }));
+
+  function updateSummaryUI() {
+    const { subtotal, shipping, total } = getCartTotals();
+    const subEl  = document.getElementById('summary-subtotal');
+    const shipEl = document.getElementById('summary-shipping');
+    const totEl  = document.getElementById('summary-total');
+    const noteEl = document.getElementById('shipping-note');
+    if (subEl)  subEl.textContent  = `$${subtotal}`;
+    if (shipEl) shipEl.textContent = shipping === 0 ? 'Free' : `$${shipping}`;
+    if (totEl)  totEl.textContent  = `$${total}`;
+    noteEl?.classList.toggle('hidden', shipping === 0 || subtotal === 0);
+  }
+
+  function bindItemEvents() {
+    document.querySelectorAll('.cart-item').forEach(itemEl => {
+      const id    = Number((itemEl as HTMLElement).dataset.id);
+      const color = (itemEl as HTMLElement).dataset.color ?? '';
+      const size  = (itemEl as HTMLElement).dataset.size  ?? '';
+
+      itemEl.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const delta = (btn as HTMLElement).dataset.action === 'increase' ? 1 : -1;
+          updateQty(id, color, size, delta);
+          const updated = getCart().find(i => i.id === id && i.color === color && i.size === size);
+          if (updated) {
+            const display = itemEl.querySelector('.qty-display');
+            const tot     = itemEl.querySelector('.item-total');
+            if (display) display.textContent = String(updated.qty);
+            if (tot)     tot.textContent     = `$${updated.price * updated.qty}`;
+          }
+          updateSummaryUI();
+          const totalQty = getCart().reduce((s, i) => s + i.qty, 0);
+          const countEl  = document.getElementById('cart-count-label');
+          if (countEl) countEl.textContent = `${totalQty} items`;
+        });
+      });
+
+      itemEl.querySelector('.remove-btn')?.addEventListener('click', () => {
+        gsap.to(itemEl, {
+          opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0,
+          duration: 0.4, ease: 'power2.in',
+          onComplete: () => { removeFromCart(id, color, size); renderCart(); },
+        });
+      });
+    });
+  }
+
+  function renderCart() {
+    const cart      = getCart();
+    const itemsEl   = document.getElementById('cart-items');
+    const contentEl = document.getElementById('cart-content');
+    const emptyEl   = document.getElementById('empty-cart');
+    const countEl   = document.getElementById('cart-count-label');
+    if (!itemsEl) return;
+
+    if (cart.length === 0) {
+      contentEl?.classList.add('hidden');
+      emptyEl?.classList.remove('hidden');
+      if (countEl) countEl.textContent = '0 items';
+      return;
+    }
+
+    contentEl?.classList.remove('hidden');
+    emptyEl?.classList.add('hidden');
+    const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+    if (countEl) countEl.textContent = `${totalQty} items`;
+
+    itemsEl.innerHTML = cart.map(item => `
+      <div class="cart-item grid grid-cols-[80px_1fr] sm:grid-cols-[100px_1fr] gap-4 sm:gap-6 py-6"
+        data-id="${item.id}" data-color="${item.color}" data-size="${item.size}">
+        <a href="/product/${item.id}">
+          <div class="aspect-[3/4] bg-void-surface w-full overflow-hidden hover:opacity-80 transition-opacity duration-300">
+            ${item.image
+              ? `<img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover" />`
+              : ''
+            }
+          </div>
+        </a>
+        <div class="flex flex-col justify-between">
+          <div class="flex justify-between items-start gap-4">
+            <div>
+              <a href="/product/${item.id}" class="text-void-white text-sm hover:text-void-muted transition-colors duration-300">${item.name}</a>
+              <p class="label-caps text-void-muted mt-1">${item.category}</p>
+            </div>
+            <p class="item-total text-void-white text-sm whitespace-nowrap">$${item.price * item.qty}</p>
+          </div>
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-4">
+            <div class="flex gap-4">
+              <div><p class="label-caps text-void-muted mb-1">Color</p><p class="label-caps text-void-white">${item.color}</p></div>
+              <div><p class="label-caps text-void-muted mb-1">Size</p><p class="label-caps text-void-white">${item.size}</p></div>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="flex items-center border border-void-border">
+                <button class="qty-btn px-3 py-1.5 label-caps text-void-muted hover:text-void-white transition-colors duration-200" data-action="decrease">−</button>
+                <span class="qty-display label-caps text-void-white px-3 py-1.5 border-x border-void-border min-w-[36px] text-center">${item.qty}</span>
+                <button class="qty-btn px-3 py-1.5 label-caps text-void-muted hover:text-void-white transition-colors duration-200" data-action="increase">+</button>
+              </div>
+              <button class="remove-btn label-caps text-void-muted hover:text-void-white underline underline-offset-4 transition-colors duration-300">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    updateSummaryUI();
+    bindItemEvents();
+    gsap.set('.cart-item', { opacity: 0, y: 16 });
+    gsap.to('.cart-item', { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.08, delay: 0.2 });
+  }
+
+  document.getElementById('promo-btn')?.addEventListener('click', () => {
+    const input = document.getElementById('promo-input') as HTMLInputElement;
+    const btn   = document.getElementById('promo-btn');
+    if (!input || !btn) return;
+    if (input.value.trim().toUpperCase() === 'VOID10') {
+      btn.textContent = 'Applied —';
+      btn.classList.add('text-void-midnight');
+      input.disabled = true;
+    } else {
+      gsap.to(input, { x: -6, duration: 0.05, yoyo: true, repeat: 5, ease: 'power2.inOut' });
+    }
+  });
+
+  document.getElementById('checkout-btn')?.addEventListener('click', () => {
+    const btn = document.getElementById('checkout-btn');
+    if (!btn) return;
+    btn.textContent = 'Coming Soon —';
+    setTimeout(() => { btn.textContent = 'Proceed to Checkout'; }, 2000);
+  });
+
+  renderCart();
+</script>

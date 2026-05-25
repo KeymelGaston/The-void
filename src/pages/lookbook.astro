@@ -1,0 +1,129 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const looks = [
+  { id: 1,  season: 'FW26', title: 'Into the Dark',       product: 'Oversized Wool Coat',  category: 'Outerwear', price: 420 },
+  { id: 2,  season: 'FW26', title: 'Absence of Noise',    product: 'Ribbed Crewneck',      category: 'Knitwear',  price: 145 },
+  { id: 3,  season: 'FW26', title: 'The Still Point',     product: 'Slim Tapered Trouser', category: 'Bottoms',   price: 180 },
+  { id: 4,  season: 'FW26', title: 'Void as Aesthetic',   product: 'Structured Tote',      category: 'Bags',      price: 260 },
+  { id: 5,  season: 'FW26', title: 'Deliberate Form',     product: 'Trench Coat',          category: 'Outerwear', price: 380 },
+  { id: 6,  season: 'FW26', title: 'Silence Wears Black', product: 'Merino Turtleneck',    category: 'Knitwear',  price: 165 },
+  { id: 7,  season: 'FW26', title: 'Stripped',            product: 'Draped Silk Top',      category: 'Tops',      price: 210 },
+  { id: 8,  season: 'FW26', title: 'Cold Light',          product: 'Wide Leg Pant',        category: 'Bottoms',   price: 195 },
+  { id: 9,  season: 'FW26', title: 'The Weight of Less',  product: 'Relaxed Linen Shirt',  category: 'Tops',      price: 135 },
+  { id: 10, season: 'FW26', title: 'Minimal Gesture',     product: 'Chain Necklace',       category: 'Jewelry',   price: 120 },
+  { id: 11, season: 'FW26', title: 'In Restraint',        product: 'Leather Belt',         category: 'Belts',     price: 110 },
+];
+---
+
+<BaseLayout title="Lookbook — The Void">
+
+  <!-- Header -->
+  <section class="pt-28 md:pt-36 pb-12 container-void border-b border-void-border">
+    <div id="look-header" class="flex items-end justify-between">
+      <div>
+        <p class="label-caps text-void-midnight mb-2">Fall / Winter 2026</p>
+        <h1 class="heading-display text-display-md text-void-white">Lookbook</h1>
+      </div>
+      <p class="label-caps text-void-muted hidden sm:block">{looks.length} looks</p>
+    </div>
+  </section>
+
+  <!-- Grid -->
+  <section class="container-void py-12 md:py-16">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+      {looks.map((look, i) => (
+        <a
+          href={`/product/${look.id}`}
+          class="look-card group relative overflow-hidden"
+          data-index={i}
+        >
+          <!-- Image -->
+          <div class="aspect-[3/4] bg-void-surface relative overflow-hidden">
+            <div class="w-full h-full bg-void-surface"></div>
+            <div class="absolute inset-0 bg-void-black/30 z-[1]"></div>
+
+            <!-- Slide number -->
+            <div class="absolute top-4 left-4 z-[2]">
+              <p class="label-caps text-void-white/30">{String(i + 1).padStart(2, '0')}</p>
+            </div>
+
+            <!-- Title overlay -->
+            <div class="absolute bottom-0 left-0 right-0 p-4 md:p-5 bg-gradient-to-t from-void-black/90 to-transparent z-[2] translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+              <p class="label-caps text-void-midnight mb-1">{look.season}</p>
+              <h2 class="heading-display text-xl md:text-2xl text-void-white">{look.title}</h2>
+            </div>
+          </div>
+
+          <!-- Product info -->
+          <div class="flex justify-between items-start mt-3 gap-2">
+            <div>
+              <p class="text-void-white text-sm mb-0.5">{look.product}</p>
+              <p class="label-caps text-void-muted">{look.category}</p>
+            </div>
+            <p class="text-void-white text-sm whitespace-nowrap">${look.price}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="look-cta" class="container-void py-20 md:py-28 border-t border-void-border">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div>
+        <p class="label-caps text-void-midnight mb-4">The Void — FW26</p>
+        <h2 class="heading-display text-display-md text-void-white mb-6">
+          Wear the<br />collection.
+        </h2>
+        <div class="flex flex-col xs:flex-row gap-3">
+          <a href="/shop" class="btn-void text-center">Shop Collection</a>
+          <a href="/about" class="btn-void-ghost text-center">Our Story</a>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        {[1,2,3,4].map(() => (
+          <div class="aspect-square bg-void-surface"></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Header entrance ──────────────────────────────────
+  const header = document.getElementById('look-header');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    gsap.set(header, { opacity: 0, y: 24 });
+    gsap.to(header, { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out' });
+  }));
+
+  // ── Cards stagger on scroll ──────────────────────────
+  document.querySelectorAll('.look-card').forEach((el, i) => {
+    gsap.set(el, { opacity: 0, y: 24 });
+    gsap.to(el, {
+      opacity: 1, y: 0,
+      duration: 1.0,
+      ease: 'power2.out',
+      stagger: 0.08,
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+    });
+  });
+
+  // ── CTA ──────────────────────────────────────────────
+  const cta = document.getElementById('look-cta');
+  if (cta) {
+    gsap.set(cta, { opacity: 0, y: 24 });
+    gsap.to(cta, {
+      opacity: 1, y: 0,
+      duration: 1.0,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: cta, start: 'top 85%', once: true },
+    });
+  }
+</script>

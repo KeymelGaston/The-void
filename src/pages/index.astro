@@ -1,0 +1,107 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+
+const featured = [
+  { id: 1,  name: 'Oversized Wool Coat', price: 420 },
+  { id: 4,  name: 'Ribbed Crewneck',     price: 145 },
+  { id: 3,  name: 'Structured Tote',     price: 260 },
+  { id: 11, name: 'Trench Coat',         price: 380 },
+];
+---
+
+<BaseLayout>
+  <Hero />
+
+  <!-- New Arrivals -->
+  <section class="container-void py-24 md:py-32">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12" data-gsap="fade-up">
+      <h2 class="heading-display text-display-md text-void-white">New Arrivals</h2>
+      <a href="/shop" class="label-caps text-void-muted hover:text-void-white transition-colors duration-300 underline underline-offset-4">View all</a>
+    </div>
+    <!-- Product grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4" id="featured-grid">
+      {featured.map((product) => (
+        <a href={`/product/${product.id}`} class="group" data-gsap="fade-up">
+          <div class="aspect-[3/4] bg-void-surface mb-3 overflow-hidden">
+            <div class="w-full h-full bg-void-surface group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"></div>
+          </div>
+          <p class="text-void-white text-sm mb-1">{product.name}</p>
+          <p class="text-void-muted text-sm font-light">${product.price}.00</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Editorial banners -->
+  <section class="container-void pb-24 md:pb-32">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+      <a href="/lookbook" class="group relative aspect-[4/3] bg-void-surface overflow-hidden flex items-end p-6 md:p-8" data-gsap="fade-up">
+        
+        <div class="absolute inset-0 bg-gradient-to-t from-void-black/80 to-transparent"></div>
+        <div class="relative z-10">
+          <p class="label-caps text-void-midnight mb-2">FW26</p>
+          <h3 class="heading-display text-2xl md:text-3xl text-void-white mb-1">View Lookbook</h3>
+          <p class="label-caps text-void-muted">11 editorial looks →</p>
+        </div>
+      </a>
+      <a href="/about" class="group relative aspect-[4/3] bg-void-surface overflow-hidden flex items-end p-6 md:p-8" data-gsap="fade-up">
+        
+        <div class="absolute inset-0 bg-gradient-to-t from-void-black/80 to-transparent"></div>
+        <div class="relative z-10">
+          <p class="label-caps text-void-midnight mb-2">The brand</p>
+          <h3 class="heading-display text-2xl md:text-3xl text-void-white mb-1">Our Story</h3>
+          <p class="label-caps text-void-muted">Silence as a statement →</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="container-void pb-24 md:pb-32">
+    <p class="label-caps text-void-muted mb-8" data-gsap="fade-up">Shop by Category</p>
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+      {['Tops', 'Bottoms', 'Outerwear', 'Knitwear', 'Bags', 'Jewelry', 'Belts'].map(cat => (
+        <a href="/shop" class="group relative aspect-square bg-void-surface flex items-end p-4 overflow-hidden" data-gsap="fade-up">
+          <div class="absolute inset-0 bg-void-midnight/0 group-hover:bg-void-midnight/20 transition-colors duration-500"></div>
+          <p class="label-caps text-void-white relative z-10">{cat}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="border-t border-void-border">
+    <div class="container-void py-20 md:py-28 max-w-xl mx-auto text-center">
+      <p class="label-caps text-void-midnight mb-4" data-gsap="fade-up">The Void — Newsletter</p>
+      <h2 class="heading-display text-display-md text-void-white mb-4" data-gsap="fade-up">Stay in the dark</h2>
+      <p class="text-void-muted text-sm font-light mb-8" data-gsap="fade-up">New drops, editorials, and silence delivered to your inbox.</p>
+      <form class="flex flex-col xs:flex-row gap-3" data-gsap="fade-up">
+        <input
+          type="email"
+          name="email"
+          id="newsletter-email"
+          placeholder="your@email.com"
+          class="flex-1 bg-transparent border border-void-border text-void-white text-sm font-light px-4 py-3 placeholder:text-void-muted/50 focus:outline-none focus:border-void-muted transition-colors duration-300"
+        />
+        <button type="submit" class="btn-void whitespace-nowrap">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('[data-gsap="fade-up"]').forEach(el => {
+    gsap.set(el, { opacity: 0, y: 24 });
+    gsap.to(el, {
+      opacity: 1, y: 0,
+      duration: 1.0,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+    });
+  });
+</script>

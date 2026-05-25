@@ -1,0 +1,356 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+export function getStaticPaths() {
+  const products = [
+    { id: 1,  name: 'Oversized Wool Coat',    price: 420, category: 'Outerwear', colors: ['Black', 'Camel', 'Midnight'], sizes: ['XS','S','M','L','XL'], description: 'A structured oversized silhouette in premium double-faced wool. Clean lapels, minimal hardware. The coat as statement.',        images: ['/images/products/oversized_wool_coat-1.jpg', '/images/products/oversized_wool_coat-2.jpg', '/images/products/oversized_wool_coat-3.jpg', '/images/products/oversized_wool_coat-4.jpg'] },
+    { id: 2,  name: 'Slim Tapered Trouser',   price: 180, category: 'Bottoms',   colors: ['Black', 'Ivory', 'Charcoal'], sizes: ['XS','S','M','L','XL'], description: 'Tailored in a fine Italian wool blend. High-rise, slim through the thigh, tapered at the ankle. Precision cut.',               images: [] },
+    { id: 3,  name: 'Structured Tote',        price: 260, category: 'Bags',      colors: ['Black', 'Midnight'],           sizes: ['One Size'],             description: 'Full-grain vegetable-tanned leather. Minimal stitching, brass hardware. Expands to carry everything, reveals nothing.',       images: [] },
+    { id: 4,  name: 'Ribbed Crewneck',        price: 145, category: 'Knitwear',  colors: ['Black', 'Ivory', 'Slate'],    sizes: ['XS','S','M','L','XL'], description: 'Extra-fine merino wool in a dense rib. Relaxed fit, reinforced seams. The foundation of every outfit.',                      images: [] },
+    { id: 5,  name: 'Draped Silk Top',        price: 210, category: 'Tops',      colors: ['Black', 'Ivory'],              sizes: ['XS','S','M','L'],      description: 'Fluid 100% silk charmeuse. Bias-cut for natural drape. Minimal and intentional.',                                            images: [] },
+    { id: 6,  name: 'Minimal Gold Ring',      price: 95,  category: 'Jewelry',   colors: ['Gold', 'Silver'],              sizes: ['5','6','7','8','9'],    description: '18k gold vermeil over sterling silver. Flat band, brushed finish. Wear alone or stack.',                                      images: [] },
+    { id: 7,  name: 'Wide Leg Pant',          price: 195, category: 'Bottoms',   colors: ['Black', 'Ecru', 'Navy'],      sizes: ['XS','S','M','L','XL'], description: 'A wide, flowing silhouette in technical crepe. High-waisted. Moves with you.',                                                 images: [] },
+    { id: 8,  name: 'Leather Belt',           price: 110, category: 'Belts',     colors: ['Black', 'Tan'],                sizes: ['S','M','L'],            description: 'Full-grain leather, single-pin buckle in brushed steel. Minimal. Indefinitely wearable.',                                     images: [] },
+    { id: 9,  name: 'Merino Turtleneck',      price: 165, category: 'Knitwear',  colors: ['Black', 'Charcoal', 'Ivory'], sizes: ['XS','S','M','L','XL'], description: 'Grade-A merino in a fine-gauge knit. Fitted turtleneck, slightly cropped. The essential layer.',                               images: [] },
+    { id: 10, name: 'Relaxed Linen Shirt',    price: 135, category: 'Tops',      colors: ['Black', 'Sand', 'Ivory'],     sizes: ['XS','S','M','L','XL'], description: 'Stonewashed Belgian linen. Relaxed fit, dropped shoulders, elongated hem. Effortless.',                                        images: [] },
+    { id: 11, name: 'Trench Coat',            price: 380, category: 'Outerwear', colors: ['Black', 'Camel'],              sizes: ['XS','S','M','L','XL'], description: 'A refined take on the classic trench. Cotton gabardine, storm flap, belted waist. Timeless.',                                  images: [] },
+    { id: 12, name: 'Chain Necklace',         price: 120, category: 'Jewelry',   colors: ['Gold', 'Silver'],              sizes: ['16"','18"','20"'],      description: 'Delicate link chain in recycled sterling silver or gold vermeil. Wear alone or layered.',                                       images: [] },
+  ];
+
+  return products.map(p => ({
+    params: { slug: String(p.id) },
+    props:  { product: p },
+  }));
+}
+
+const { product } = Astro.props;
+---
+
+<BaseLayout title={`${product.name} — The Void`}>
+
+  <section class="pt-28 md:pt-32 container-void pb-24">
+
+    <!-- Hidden product data for JS -->
+    <div
+      id="product-data"
+      data-id={product.id}
+      data-name={product.name}
+      data-category={product.category}
+      data-price={product.price}
+      data-image={product.images[0] ?? ''}
+      class="hidden"
+    ></div>
+
+    <!-- Breadcrumb -->
+    <nav id="breadcrumb" class="flex items-center gap-2 mb-10 md:mb-14">
+      <a href="/shop" class="label-caps text-void-muted hover:text-void-white transition-colors duration-300">Shop</a>
+      <span class="label-caps text-void-border">—</span>
+      <span class="label-caps text-void-muted">{product.category}</span>
+      <span class="label-caps text-void-border">—</span>
+      <span class="label-caps text-void-white">{product.name}</span>
+    </nav>
+
+    <!-- Product layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
+
+      <!-- Left: Image -->
+      <div id="product-image" class="relative">
+        <div class="aspect-[3/4] bg-void-surface w-full overflow-hidden relative">
+          {product.images.length > 0 ? (
+            product.images.map((src, i) => (
+              <img
+                src={src}
+                alt={product.name}
+                class:list={['product-main-img absolute inset-0 w-full h-full object-cover transition-opacity duration-500', i === 0 ? 'opacity-100' : 'opacity-0']}
+                data-index={i}
+              />
+            ))
+          ) : (
+            <div class="w-full h-full bg-void-surface"></div>
+          )}
+        </div>
+        <div class="grid grid-cols-4 gap-2 mt-2">
+          {product.images.length > 0 ? (
+            product.images.map((src, i) => (
+              <button
+                class:list={['thumbnail aspect-square bg-void-surface overflow-hidden cursor-pointer border transition-colors duration-200', i === 0 ? 'border-void-white' : 'border-transparent hover:border-void-border']}
+                data-index={i}
+              >
+                <img src={src} alt={`${product.name} ${i + 1}`} class="w-full h-full object-cover" />
+              </button>
+            ))
+          ) : (
+            [0,1,2,3].map(i => (
+              <div class:list={['aspect-square bg-void-surface overflow-hidden cursor-pointer border transition-colors duration-200', i === 0 ? 'border-void-white' : 'border-transparent hover:border-void-border']}>
+                <div class="w-full h-full bg-void-surface"></div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      <!-- Right: Info -->
+      <div id="product-info" class="flex flex-col md:sticky md:top-24 md:self-start">
+
+        <!-- Category + name -->
+        <p class="label-caps text-void-midnight mb-3">{product.category}</p>
+        <h1 class="heading-display text-display-md text-void-white mb-2">{product.name}</h1>
+        <p class="text-void-white text-xl font-light mb-6">${product.price}.00</p>
+
+        <div class="w-full h-px bg-void-border mb-6"></div>
+
+        <!-- Description -->
+        <p class="text-void-muted text-sm font-light leading-relaxed mb-8">{product.description}</p>
+
+        <!-- Color selector -->
+        <div class="mb-6">
+          <div class="flex justify-between mb-3">
+            <p class="label-caps text-void-white">Color</p>
+            <p id="selected-color" class="label-caps text-void-muted">{product.colors[0]}</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            {product.colors.map((color, i) => (
+              <button
+                class="color-chip label-caps px-4 py-2 border transition-all duration-300"
+                class:list={[i === 0 ? 'border-void-white text-void-white' : 'border-void-border text-void-muted hover:border-void-white hover:text-void-white']}
+                data-color={color}
+              >
+                {color}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Size selector -->
+        <div class="mb-8">
+          <div class="flex justify-between mb-3">
+            <p class="label-caps text-void-white">Size</p>
+            <button class="label-caps text-void-muted underline underline-offset-4 hover:text-void-white transition-colors duration-300">Size guide</button>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            {product.sizes.map((size, i) => (
+              <button
+                class="size-chip label-caps px-4 py-2.5 border transition-all duration-300"
+                class:list={[i === 0 ? 'border-void-white text-void-white' : 'border-void-border text-void-muted hover:border-void-white hover:text-void-white']}
+                data-size={size}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Add to cart -->
+        <button
+          id="add-to-cart"
+          class="w-full label-caps text-void-black bg-void-white py-4 hover:bg-void-white/90 transition-all duration-300 mb-3"
+        >
+          Add to Cart
+        </button>
+        <button id="wishlist-btn" class="w-full label-caps text-void-white border border-void-border py-4 hover:border-void-white transition-colors duration-300">
+          Save to Wishlist
+        </button>
+
+        <div class="w-full h-px bg-void-border mt-8 mb-6"></div>
+
+        <!-- Details accordion -->
+        <div class="flex flex-col gap-0">
+          {['Materials', 'Care', 'Shipping & Returns'].map(item => (
+            <div class="accordion-item border-b border-void-border">
+              <button class="accordion-trigger w-full flex justify-between items-center py-4">
+                <span class="label-caps text-void-white">{item}</span>
+                <span class="accordion-icon text-void-muted text-lg leading-none">+</span>
+              </button>
+              <div class="accordion-body overflow-hidden" style="height:0">
+                <p class="text-void-muted text-sm font-light leading-relaxed pb-4">
+                  {item === 'Materials' && 'Premium natural fibers sourced from certified suppliers. Each material is selected for longevity and minimal environmental impact.'}
+                  {item === 'Care' && 'Dry clean or hand wash in cold water. Lay flat to dry. Store folded, away from direct light.'}
+                  {item === 'Shipping & Returns' && 'Free shipping on orders over $200. Returns accepted within 14 days of delivery. Items must be unworn and in original packaging.'}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Related products -->
+    <div class="mt-24 md:mt-32">
+      <div class="flex items-end justify-between mb-10">
+        <h2 id="related-title" class="heading-display text-display-md text-void-white">You may also like</h2>
+        <a href="/shop" class="label-caps text-void-muted hover:text-void-white transition-colors duration-300 underline underline-offset-4 hidden sm:block">View all</a>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        {[1,2,3,4].map(i => (
+          <a href={`/product/${i}`} class="group related-card">
+            <div class="aspect-[3/4] bg-void-surface mb-3 overflow-hidden">
+              <div class="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"></div>
+            </div>
+            <p class="text-void-white text-sm mb-0.5">Related Product {i}</p>
+            <p class="label-caps text-void-muted">$—</p>
+          </a>
+        ))}
+      </div>
+    </div>
+
+  </section>
+
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Image gallery ─────────────────────────────────────
+  const mainImgs   = document.querySelectorAll('.product-main-img');
+  const thumbnails = document.querySelectorAll('.thumbnail');
+
+  thumbnails.forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      const idx = Number((thumb as HTMLElement).dataset.index);
+
+      mainImgs.forEach((img, i) => {
+        img.classList.toggle('opacity-100', i === idx);
+        img.classList.toggle('opacity-0',  i !== idx);
+      });
+
+      thumbnails.forEach((t, i) => {
+        t.classList.toggle('border-void-white', i === idx);
+        t.classList.toggle('border-transparent', i !== idx);
+      });
+    });
+  });
+
+  // ── Page entrance ────────────────────────────────────
+  const breadcrumb = document.getElementById('breadcrumb');
+  const image      = document.getElementById('product-image');
+  const info       = document.getElementById('product-info');
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      gsap.set([breadcrumb, image, info], { opacity: 0, y: 24 });
+      gsap.to([breadcrumb, image, info], {
+        opacity: 1, y: 0,
+        duration: 0.9,
+        ease: 'power2.out',
+        stagger: 0.12,
+      });
+    });
+  });
+
+  // Related cards
+  document.querySelectorAll('.related-card').forEach(el => {
+    gsap.set(el, { opacity: 0, y: 24 });
+    gsap.to(el, {
+      opacity: 1, y: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+      stagger: 0.1,
+      scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+    });
+  });
+
+  // ── Color selector ───────────────────────────────────
+  const colorChips    = document.querySelectorAll('.color-chip');
+  const selectedColor = document.getElementById('selected-color');
+
+  colorChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      colorChips.forEach(c => {
+        c.classList.remove('border-void-white', 'text-void-white');
+        c.classList.add('border-void-border', 'text-void-muted');
+      });
+      chip.classList.add('border-void-white', 'text-void-white');
+      chip.classList.remove('border-void-border', 'text-void-muted');
+      if (selectedColor) selectedColor.textContent = chip.dataset.color ?? '';
+    });
+  });
+
+  // ── Size selector ────────────────────────────────────
+  const sizeChips = document.querySelectorAll('.size-chip');
+
+  sizeChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      sizeChips.forEach(c => {
+        c.classList.remove('border-void-white', 'text-void-white');
+        c.classList.add('border-void-border', 'text-void-muted');
+      });
+      chip.classList.add('border-void-white', 'text-void-white');
+      chip.classList.remove('border-void-border', 'text-void-muted');
+    });
+  });
+
+  // ── Add to cart ───────────────────────────────────────
+  import { addToCart } from '@/lib/cart';
+
+  const cartBtn = document.getElementById('add-to-cart');
+  const dataEl  = document.getElementById('product-data');
+
+  cartBtn?.addEventListener('click', () => {
+    const color = (document.querySelector('.color-chip.border-void-white') as HTMLElement)?.dataset.color ?? '';
+    const size  = (document.querySelector('.size-chip.border-void-white')  as HTMLElement)?.dataset.size  ?? '';
+
+    addToCart({
+      id:       Number(dataEl?.dataset.id       ?? 0),
+      name:     dataEl?.dataset.name            ?? '',
+      category: dataEl?.dataset.category        ?? '',
+      price:    Number(dataEl?.dataset.price    ?? 0),
+      image:    dataEl?.dataset.image           ?? '',
+      color,
+      size,
+    });
+
+    const original = cartBtn.textContent;
+    cartBtn.textContent = 'Added —';
+    cartBtn.classList.add('bg-void-midnight', 'text-void-white');
+    cartBtn.classList.remove('bg-void-white', 'text-void-black');
+    setTimeout(() => {
+      cartBtn.textContent = original;
+      cartBtn.classList.remove('bg-void-midnight', 'text-void-white');
+      cartBtn.classList.add('bg-void-white', 'text-void-black');
+    }, 1800);
+  });
+
+  // ── Wishlist ──────────────────────────────────────────
+  import { toggleWishlist, isWishlisted } from '@/lib/wishlist';
+
+  const wishlistBtn = document.getElementById('wishlist-btn');
+  const productId2  = Number(dataEl?.dataset.id ?? 0);
+
+  function syncWishlistBtn() {
+    if (!wishlistBtn) return;
+    const saved = isWishlisted(productId2);
+    wishlistBtn.textContent = saved ? 'Saved —' : 'Save to Wishlist';
+    wishlistBtn.classList.toggle('border-void-white', saved);
+    wishlistBtn.classList.toggle('text-void-white', true);
+  }
+
+  syncWishlistBtn();
+
+  wishlistBtn?.addEventListener('click', () => {
+    const added = toggleWishlist({
+      id:       productId2,
+      name:     dataEl?.dataset.name     ?? '',
+      category: dataEl?.dataset.category ?? '',
+      price:    Number(dataEl?.dataset.price ?? 0),
+    });
+    syncWishlistBtn();
+  });
+  document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const item = trigger.closest('.accordion-item');
+      const body = item?.querySelector('.accordion-body') as HTMLElement;
+      const icon = trigger.querySelector('.accordion-icon');
+      const isOpen = body.style.height !== '0px' && body.style.height !== '';
+
+      gsap.to(body, {
+        height: isOpen ? 0 : 'auto',
+        duration: 0.4,
+        ease: 'power2.inOut',
+      });
+      if (icon) icon.textContent = isOpen ? '+' : '−';
+    });
+  });
+</script>

@@ -1,0 +1,363 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const categories = ['All', 'Tops', 'Bottoms', 'Outerwear', 'Knitwear', 'Bags', 'Jewelry', 'Belts'];
+
+const products = [
+  { id: 1,  name: 'Oversized Wool Coat',  price: 420, category: 'Outerwear', defaultColor: 'Black', defaultSize: 'M',        images: ['/images/products/oversized_wool_coat-1.jpg', '/images/products/oversized_wool_coat-2.jpg', '/images/products/oversized_wool_coat-3.jpg', '/images/products/oversized_wool_coat-4.jpg'] },
+  { id: 2,  name: 'Slim Tapered Trouser', price: 180, category: 'Bottoms',   defaultColor: 'Black', defaultSize: 'M',        images: [] },
+  { id: 3,  name: 'Structured Tote',      price: 260, category: 'Bags',      defaultColor: 'Black', defaultSize: 'One Size', images: [] },
+  { id: 4,  name: 'Ribbed Crewneck',      price: 145, category: 'Knitwear',  defaultColor: 'Black', defaultSize: 'M',        images: [] },
+  { id: 5,  name: 'Draped Silk Top',      price: 210, category: 'Tops',      defaultColor: 'Black', defaultSize: 'M',        images: [] },
+  { id: 6,  name: 'Minimal Gold Ring',    price: 95,  category: 'Jewelry',   defaultColor: 'Gold',  defaultSize: '7',        images: [] },
+  { id: 7,  name: 'Wide Leg Pant',        price: 195, category: 'Bottoms',   defaultColor: 'Black', defaultSize: 'M',        images: [] },
+  { id: 8,  name: 'Leather Belt',         price: 110, category: 'Belts',     defaultColor: 'Black', defaultSize: 'M',        images: [] },
+  { id: 9,  name: 'Merino Turtleneck',    price: 165, category: 'Knitwear',  defaultColor: 'Black', defaultSize: 'M',        images: [] },
+  { id: 10, name: 'Relaxed Linen Shirt',  price: 135, category: 'Tops',      defaultColor: 'Black', defaultSize: 'M',        images: [] },
+  { id: 11, name: 'Trench Coat',          price: 380, category: 'Outerwear', defaultColor: 'Black', defaultSize: 'M',        images: [] },
+  { id: 12, name: 'Chain Necklace',       price: 120, category: 'Jewelry',   defaultColor: 'Gold',  defaultSize: '18"',      images: [] },
+];
+---
+
+<BaseLayout title="Shop — The Void">
+
+  <!-- Header -->
+  <section class="pt-36 md:pt-40 pb-8 border-b border-void-border">
+    <div class="container-void flex items-end justify-between">
+      <div id="shop-heading">
+        <p class="label-caps text-void-midnight mb-2">The Void</p>
+        <h1 id="shop-title" class="heading-display text-display-md text-void-white">Shop</h1>
+      </div>
+      <div id="shop-actions" class="flex items-center gap-4 md:gap-6">
+        <p id="piece-count" class="label-caps text-void-muted hidden sm:block">{products.length} pieces</p>
+        <button id="wishlist-toggle" class="flex items-center gap-2 label-caps text-void-muted border border-void-border px-4 py-2.5 hover:border-void-white hover:text-void-white transition-colors duration-300">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Saved
+        </button>
+        <button id="filter-btn" class="flex items-center gap-2 label-caps text-void-white border border-void-border px-4 py-2.5 hover:border-void-white transition-colors duration-300">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          Filter
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter panel (slide down) -->
+  <div id="filter-panel" class="overflow-hidden border-b border-void-border" style="height: 0;">
+    <div class="container-void py-6">
+      <div class="flex flex-wrap gap-3">
+        {categories.map(cat => (
+          <button
+            class="filter-chip label-caps px-4 py-2 border transition-all duration-300"
+            class:list={[
+              cat === 'All'
+                ? 'border-void-white text-void-white bg-void-white/5'
+                : 'border-void-border text-void-muted hover:border-void-white hover:text-void-white'
+            ]}
+            data-category={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Product grid -->
+  <section class="container-void py-12 md:py-16">
+    <div
+      id="product-grid"
+      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4"
+    >
+      {products.map((product, i) => (
+        <a
+          href={`/product/${product.id}`}
+          class="product-card group"
+          data-category={product.category}
+          data-gsap="fade-up"
+          style={`--i: ${i}`}
+        >
+          <!-- Image -->
+          <div class="aspect-[3/4] bg-void-surface mb-3 overflow-hidden relative">
+            {product.images[0] ? (
+              <>
+                <img
+                  src={product.images[0]}
+                  alt={product.name}
+                  class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-0"
+                />
+                {product.images[1] && (
+                  <img
+                    src={product.images[1]}
+                    alt={product.name}
+                    class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:opacity-100"
+                  />
+                )}
+              </>
+            ) : (
+              <div class="w-full h-full bg-void-surface"></div>
+            )}
+            <!-- Quick add -->
+            <div class="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]">
+              <button
+                class="quick-add w-full label-caps text-void-black bg-void-white py-3 hover:bg-void-white/90 transition-colors duration-200"
+                data-id={product.id}
+                data-name={product.name}
+                data-category={product.category}
+                data-price={product.price}
+                data-color={product.defaultColor}
+                data-size={product.defaultSize}
+                onclick="event.preventDefault()"
+              >
+                Quick Add
+              </button>
+            </div>
+          </div>
+          <!-- Info -->
+          <div class="flex justify-between items-start gap-2">
+            <div>
+              <p class="text-void-white text-sm mb-0.5">{product.name}</p>
+              <p class="label-caps text-void-muted">{product.category}</p>
+            </div>
+            <p class="text-void-white text-sm whitespace-nowrap">${product.price}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- Empty state -->
+    <div id="empty-state" class="hidden py-24 text-center">
+      <p class="heading-display text-display-md text-void-white/20 mb-3">—</p>
+      <p class="label-caps text-void-muted">No pieces in this category</p>
+    </div>
+  </section>
+
+  <!-- Wishlist view (hidden by default) -->
+  <section id="wishlist-view" class="container-void py-12 md:py-16 hidden">
+    <div id="wishlist-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4"></div>
+    <div id="wishlist-empty" class="hidden py-24 text-center">
+      <p class="heading-display text-display-md text-void-white/20 mb-3">—</p>
+      <p class="label-caps text-void-muted mb-6">Nothing saved yet</p>
+      <button id="back-to-shop" class="btn-void">Browse Collection</button>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { addToCart } from '@/lib/cart';
+  import { getWishlist, toggleWishlist } from '@/lib/wishlist';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── Wishlist toggle ───────────────────────────────────
+  const wishlistToggle = document.getElementById('wishlist-toggle');
+  const shopSection    = document.getElementById('product-grid')?.closest('section');
+  const wishlistView   = document.getElementById('wishlist-view');
+  const filterPanelEl  = document.getElementById('filter-panel');
+  const filterBtnEl    = document.getElementById('filter-btn');
+  const shopTitle      = document.getElementById('shop-title');
+  const pieceCount     = document.getElementById('piece-count');
+  let showingWishlist  = false;
+
+  function renderWishlist() {
+    const items     = getWishlist();
+    const grid      = document.getElementById('wishlist-grid');
+    const emptyEl   = document.getElementById('wishlist-empty');
+    if (!grid) return;
+
+    if (items.length === 0) {
+      grid.classList.add('hidden');
+      emptyEl?.classList.remove('hidden');
+      return;
+    }
+
+    grid.classList.remove('hidden');
+    emptyEl?.classList.add('hidden');
+
+    grid.innerHTML = items.map(item => `
+      <div class="group relative">
+        <a href="/product/${item.id}" class="block">
+          <div class="aspect-[3/4] bg-void-surface mb-3 overflow-hidden">
+            <div class="w-full h-full group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"></div>
+          </div>
+          <div class="flex justify-between items-start gap-2">
+            <div>
+              <p class="text-void-white text-sm mb-0.5">${item.name}</p>
+              <p class="label-caps text-void-muted">${item.category}</p>
+            </div>
+            <p class="text-void-white text-sm whitespace-nowrap">$${item.price}</p>
+          </div>
+        </a>
+        <button
+          class="remove-wish mt-2 label-caps text-void-muted hover:text-void-white underline underline-offset-4 transition-colors duration-300 text-xs"
+          data-id="${item.id}"
+          data-name="${item.name}"
+          data-category="${item.category}"
+          data-price="${item.price}"
+        >Remove</button>
+      </div>
+    `).join('');
+
+    // Bind remove buttons
+    grid.querySelectorAll('.remove-wish').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const el = btn as HTMLElement;
+        toggleWishlist({ id: Number(el.dataset.id), name: el.dataset.name ?? '', category: el.dataset.category ?? '', price: Number(el.dataset.price) });
+        renderWishlist();
+        updateWishlistBadge();
+      });
+    });
+
+    gsap.set(grid.children, { opacity: 0, y: 16 });
+    gsap.to(grid.children, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.08 });
+  }
+
+  function updateWishlistBadge() {
+    const count = getWishlist().length;
+    if (wishlistToggle) {
+      wishlistToggle.classList.toggle('border-void-white', count > 0);
+      wishlistToggle.classList.toggle('text-void-white', count > 0);
+      wishlistToggle.classList.toggle('text-void-muted', count === 0);
+    }
+  }
+
+  wishlistToggle?.addEventListener('click', () => {
+    showingWishlist = !showingWishlist;
+
+    if (showingWishlist) {
+      shopSection?.classList.add('hidden');
+      filterPanelEl?.classList.add('hidden');
+      filterBtnEl?.classList.add('hidden');
+      wishlistView?.classList.remove('hidden');
+      if (shopTitle) shopTitle.textContent = 'Saved';
+      if (pieceCount) pieceCount.textContent = `${getWishlist().length} pieces`;
+      wishlistToggle.classList.add('border-void-white', 'text-void-white');
+      wishlistToggle.classList.remove('text-void-muted');
+      renderWishlist();
+    } else {
+      shopSection?.classList.remove('hidden');
+      filterPanelEl?.classList.remove('hidden');
+      filterBtnEl?.classList.remove('hidden');
+      wishlistView?.classList.add('hidden');
+      if (shopTitle) shopTitle.textContent = 'Shop';
+      if (pieceCount) pieceCount.textContent = `${document.querySelectorAll('.product-card:not([style*="display: none"])').length} pieces`;
+      updateWishlistBadge();
+    }
+  });
+
+  document.getElementById('back-to-shop')?.addEventListener('click', () => {
+    wishlistToggle?.click();
+  });
+
+  updateWishlistBadge();
+  window.addEventListener('wishlist:updated', updateWishlistBadge);
+
+  // ── Quick Add ────────────────────────────────────────
+  document.querySelectorAll('.quick-add').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const el = btn as HTMLElement;
+      addToCart({
+        id:       Number(el.dataset.id),
+        name:     el.dataset.name     ?? '',
+        category: el.dataset.category ?? '',
+        price:    Number(el.dataset.price),
+        color:    el.dataset.color    ?? 'Black',
+        size:     el.dataset.size     ?? 'M',
+      });
+      const original = btn.textContent;
+      btn.textContent = 'Added —';
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    });
+  });
+
+  // ── Entrance animations ──────────────────────────────
+  const heading = document.getElementById('shop-heading');
+  const actions = document.getElementById('shop-actions');
+
+  requestAnimationFrame(() => {
+    gsap.set([heading, actions], { opacity: 0, y: 20 });
+    requestAnimationFrame(() => {
+      gsap.to([heading, actions], {
+        opacity: 1, y: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        stagger: 0.1,
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-gsap="fade-up"]').forEach((el, i) => {
+    gsap.set(el, { opacity: 0, y: 24 });
+    gsap.to(el, {
+      opacity: 1,
+      y: 0,
+      duration: 1.0,
+      ease: 'power2.out',
+      delay: i < 2 ? i * 0.1 : 0,
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 88%',
+        once: true,
+      },
+    });
+  });
+
+  // ── Filter panel toggle ──────────────────────────────
+  const filterBtn   = document.getElementById('filter-btn');
+  const filterPanel = document.getElementById('filter-panel');
+  let panelOpen     = false;
+
+  filterBtn?.addEventListener('click', () => {
+    panelOpen = !panelOpen;
+    gsap.to(filterPanel, {
+      height: panelOpen ? 'auto' : 0,
+      duration: 0.5,
+      ease: 'power2.inOut',
+    });
+    filterBtn.classList.toggle('border-void-white', panelOpen);
+  });
+
+  // ── Category filter ──────────────────────────────────
+  const chips    = document.querySelectorAll('.filter-chip');
+  const cards    = document.querySelectorAll('.product-card');
+  const empty    = document.getElementById('empty-state');
+  let active     = 'All';
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      active = chip.dataset.category ?? 'All';
+
+      // Update chip styles
+      chips.forEach(c => {
+        const isActive = c.dataset.category === active;
+        c.classList.toggle('border-void-white', isActive);
+        c.classList.toggle('text-void-white', isActive);
+        c.classList.toggle('bg-void-white/5', isActive);
+        c.classList.toggle('border-void-border', !isActive);
+        c.classList.toggle('text-void-muted', !isActive);
+      });
+
+      // Filter cards
+      let visible = 0;
+      cards.forEach((card, i) => {
+        const match = active === 'All' || card.dataset.category === active;
+        if (match) {
+          visible++;
+          gsap.to(card, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out', delay: (i % 4) * 0.05 });
+          (card as HTMLElement).style.display = '';
+        } else {
+          gsap.to(card, {
+            opacity: 0, scale: 0.97, duration: 0.3, ease: 'power2.in',
+            onComplete: () => { (card as HTMLElement).style.display = 'none'; }
+          });
+        }
+      });
+
+      empty?.classList.toggle('hidden', visible > 0);
+    });
+  });
+</script>
